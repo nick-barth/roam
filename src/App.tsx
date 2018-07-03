@@ -2,16 +2,27 @@
 import * as React from 'react';
 
 // Components
-import Spinner from './components/spinner';
+import Search from './components/search';
 
 // CSS
 import './App.css';
 
-class App extends React.Component {
+export  class App extends React.Component<any, any> {
+
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      query: String
+    };
+
+  }
+
+
   public render() {
     return (
       <div className="App">
-        <Spinner />
+        <Search />
       </div>
     );
   }
