@@ -4,8 +4,39 @@ import App from './App';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
+import 'cross-fetch/polyfill';
+
+
+import { InMemoryCache } from 'apollo-cache-inmemory';
+
+import { ApolloClient } from 'apollo-client';
+
+import { HttpLink } from 'apollo-link-http';
+
+import { ApolloProvider } from 'react-apollo';
+
+
+
+const url = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
+
+const httpLink = new HttpLink({
+  headers: {
+    "Access-Control-Allow-Origin": "*"
+  },
+  uri: url
+});
+
+const cache = new InMemoryCache();
+
+const client = new ApolloClient({
+  cache,
+  link: httpLink
+});
+
 ReactDOM.render(
-  <App />,
+  <ApolloProvider client={client}>
+    <App />
+  </ApolloProvider>,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

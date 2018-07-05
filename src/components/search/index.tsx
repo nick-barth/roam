@@ -32,7 +32,12 @@ export default class Spinner extends React.Component<any, any> {
         fetch(query)
         .then(response => {
             response.json().then(data => {
-                setMap(data);
+                console.log(data.features[0].properties);
+                setMap({
+                    location: data.features[0].geometry.coordinates,
+                    name: data.features[0].properties.name
+
+                });
             })
         });
         
