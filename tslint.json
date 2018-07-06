@@ -8,6 +8,8 @@
   },
    "rules": {
         "no-console": false,
-        "jsx-no-lambda": false
+        "jsx-no-lambda": false,
+        "object-literal-sort-keys": false,
+        "max-classes-per-file": [true, 5, "exclude-class-expressions"]
     }
 }

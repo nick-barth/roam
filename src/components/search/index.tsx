@@ -7,10 +7,6 @@ import Spinner from '../spinner';
 // CSS
 import './index.css';
 
-/*****
-SEARCH
-******/
-
 export default class Search extends React.Component<any, any> {
 
     constructor(props:any) {
@@ -24,10 +20,10 @@ export default class Search extends React.Component<any, any> {
     }
 
     /**
-     * fire's search, in production would debounce / promise&promise delete if updated - however, lazy
+     * doSearch - fires search, in production would debounce / promise&promise delete if updated - however, lazy
      * @param e - event
      */
-    public doSearch(e:any):void {
+    public doSearch(e:any): void {
         e.preventDefault();
         this.setState({isLoading: true});
         const { searchQuery } = this.state;
@@ -50,6 +46,18 @@ export default class Search extends React.Component<any, any> {
         
     };
 
+    /**
+     * Bubbles that bad boy location up & hides results
+     * @param loc - name and location of selected result
+     */
+
+    public selectLocation(loc:object): void {
+        this.props.setMap(loc);
+        this.setState({
+            results: []
+        });
+    }
+
 
     public render() {
         const { results, isLoading } = this.state;
@@ -65,10 +73,10 @@ export default class Search extends React.Component<any, any> {
                             Search Results, please choose correct one
                         </div>
                         {results.map((result:any) => {
-                            console.log(result.properties);
+                            console.log(result);
                             const { name, id } = result.properties;
                             return (
-                                <div onClick={() => this.props.setMap({ location: result.geometry.coordinates, name})} key={id}>
+                                <div onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
                                     {name}
                                 </div>
                             )

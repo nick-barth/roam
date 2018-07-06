@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/async": "2.0.31",
+    "@types/mapbox-gl": "^0.45.1",
     "@types/prop-types": "^15.5.3",
     "apollo-boost": "^0.1.10",
     "apollo-cache-inmemory": "^1.2.5",
@@ -12,6 +13,8 @@
     "cross-fetch": "^2.2.2",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "mapbox-gl": "^0.46.0",
+    "pbf": "^3.1.0",
     "react": "^16.4.1",
     "react-apollo": "^2.1.8",
     "react-dom": "^16.4.1",
