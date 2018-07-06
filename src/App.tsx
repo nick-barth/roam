@@ -32,7 +32,7 @@ export  class App extends React.Component<any, any> {
     return (
       <div className="App">
         <Search setMap={(data:any) => this.setMap(data)}/>
-          {query.name !== '' ? <Results lat={query.location[0]} lon={query.location[1]} /> : null}
+          {query.name !== '' ? <Results lat={query.location[1]} lon={query.location[0]} /> : null}
       </div>
     );
   }
