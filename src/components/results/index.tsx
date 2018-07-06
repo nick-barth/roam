@@ -53,12 +53,9 @@ const GET_NEARBY_INFO = gql`
 class TransitQuery extends Query<InterfaceProps> {}
 
 export default class Results extends React.Component<any, any> {
-    private mapContainer: React.RefObject<any>;
 
     constructor(props:any) {
         super(props);
-
-        this.mapContainer = React.createRef();
 
     }
 
@@ -131,8 +128,9 @@ export default class Results extends React.Component<any, any> {
             
             const poiUrl = `https://cdn.digitransit.fi/map/v1/hsl-stop-map/${zoom}/${y}/${x}.pbf`;
 
-            const map = new mapboxgl.Map({
-                container: 'mapContainer'
+            this.map = new mapboxgl.Map({
+                container: 'mapContainer',
+                style: 'mapbox://styles/mapbox/streets-v9'
             });
 
             const data = {
@@ -156,11 +154,11 @@ export default class Results extends React.Component<any, any> {
                 tilejson:"2.0.0"
             };
 
-            map.on('load', () => {
+            this.map.on('load', () => {
                 this.map.addSource('pois', {
-                type: 'geojson',
-                data
-            });
+                    type: 'geojson',
+                    data
+                });
         
         });
 
@@ -190,7 +188,7 @@ export default class Results extends React.Component<any, any> {
 
                 }}
                 </TransitQuery>
-                <div id="mapContainer" ref={this.mapContainer} />
+                <div id="mapContainer" />
             </React.Fragment>
 
             
