@@ -68,7 +68,6 @@ export default class Results extends React.Component<any, any> {
 
     }
 
-
     /**
      * Formatting floating point to numbers for lazy compares
      * @param float 
@@ -111,13 +110,21 @@ export default class Results extends React.Component<any, any> {
 
     public formatData(data:any, coords:any):InterfaceNearBy {
 
+        const stops = data.stopsByRadius.edges.map((stop:any) => {
+            return stop.node.stop;
+        });
+
+        const uniqStops = stops.filter((stop:any, index:number, self:any) =>
+            index === self.findIndex((s:any) => (
+                s.name === stop.name
+            ))
+        );
+
+
         return {
             bikeParks: this.calcWithinProximity(data.bikeParks, coords),
             bikeRentals: this.calcWithinProximity(data.bikeRentalStations, coords),
-            stops: data.stopsByRadius.edges.map((stop:any) => {
-                return stop.node.stop;
-            })
-
+            stops: uniqStops
         };
 
     }
@@ -166,7 +173,7 @@ export default class Results extends React.Component<any, any> {
                                     <div className="results__grid-container">
                                         <div className="results__grid-item">
                                             <div className="results__grid-item__title">
-                                                Nearby Bike Rentals Stations
+                                                Bike Rentals Stations
                                             </div>
                                             <div className="results__grid-item__list">
                                                 {pois.bikeRentals[0] ? (
@@ -185,7 +192,7 @@ export default class Results extends React.Component<any, any> {
                                         </div>
                                         <div className="results__grid-item">
                                             <div className="results__grid-item__title">
-                                                Near By Transit Stops
+                                                Transit Stops
                                             </div>
                                             <div className="results__grid-item__list">
                                                 {pois.stops[0] ? (
@@ -200,6 +207,25 @@ export default class Results extends React.Component<any, any> {
                                                         )
                                                     })
                                                 ) : <span> Nothing close.. sorry :( </span>}
+                                            </div>
+                                        </div>
+                                        <div className="results__grid-item">
+                                            <div className="results__grid-item__title">
+                                                Bike Parking
+                                            </div>
+                                            <div className="results__grid-item__list">
+                                                {pois.bikeParks[0] ? (
+                                                    pois.bikeParks.map((station:any) => {
+                                                        return (
+                                                            <div className="results__grid-item__list-item" 
+                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                            key={station.lat}
+                                                        >
+                                                                {station.name}
+                                                            </div>
+                                                        )
+                                                    })
+                                                ) : <span> Nope, chain ur bike to a tree </span>}
                                             </div>
                                         </div>
                                     </div>
