@@ -9,6 +9,9 @@ import mapboxgl from 'mapbox-gl';
 // Components
 import Spinner from '../spinner';
 
+// CSS
+import './index.css';
+
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGlzb3duZm9vdCIsImEiOiJjamphNWZvaTMwN3VkM3dwajluOGQxOThtIn0.96xLYTzSYN7V6iN0EbzpnA';
 
 
@@ -16,6 +19,12 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaGlzb3duZm9vdCIsImEiOiJjamphNWZvaTMwN3VkM3dwa
 interface InterfaceProps {
   lat?: number;
   lon?: number;
+}
+
+interface InterfaceNearBy {
+    bikeRentals: object[],
+    bikeParks: object[],
+    stops: object[]
 }
 
 
@@ -27,10 +36,10 @@ const GET_NEARBY_INFO = gql`
             edges {
                 node {
                     stop { 
-                        gtfsId 
                         name
+                        lat
+                        lon
                     }
-                    distance
                 }
             }
         }
@@ -100,20 +109,27 @@ export default class Results extends React.Component<any, any> {
      * @param coords 
      */
 
-    public formatData(data:any, coords:any):object {
+    public formatData(data:any, coords:any):InterfaceNearBy {
 
-       return {
+        return {
             bikeParks: this.calcWithinProximity(data.bikeParks, coords),
-            bikeRentals: this.calcWithinProximity(data.bikeRentalStations, coords)
+            bikeRentals: this.calcWithinProximity(data.bikeRentalStations, coords),
+            stops: data.stopsByRadius.edges.map((stop:any) => {
+                return stop.node.stop;
+            })
+
         };
 
     }
 
-    /**
-     * Get Map - rest to get that map
-     * @param data 
-     * @param coords 
-     */
+    public centerMap(this: any, coords:any):void {
+        const { lat, lon } = coords;
+
+        this.map.easeTo({
+            center: [lon, lat],
+        })
+
+    }
 
     public getMap(this:any, coords:any):any {
 
@@ -130,6 +146,8 @@ export default class Results extends React.Component<any, any> {
 
     public render () {
         const { lat, lon } = this.props;
+        this.getMap({lat, lon});
+
         return (
             <React.Fragment>
                 <TransitQuery query={GET_NEARBY_INFO} variables={{lat, lon}}>
@@ -141,14 +159,48 @@ export default class Results extends React.Component<any, any> {
                             return `Error! ${error.message}`;
                         }
                         if (data) {
-                            this.formatData(data, {lat, lon});
-                            this.getMap({lat, lon});
+                            const pois = this.formatData(data, {lat, lon});
+                            console.log(pois);
                             return (
                                 <div>
-                                    <div id="mapContainer" />
-                                    <div className="grid-container">
-                                        <div className="grid-item">
-                                            he
+                                    <div className="results__grid-container">
+                                        <div className="results__grid-item">
+                                            <div className="results__grid-item__title">
+                                                Nearby Bike Rentals Stations
+                                            </div>
+                                            <div className="results__grid-item__list">
+                                                {pois.bikeRentals[0] ? (
+                                                    pois.bikeRentals.map((station:any) => {
+                                                        return (
+                                                            <div 
+                                                                className="results__grid-item__list-item" 
+                                                                onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                                key={station.name}
+                                                            >
+                                                                {station.name}
+                                                            </div>
+                                                        )
+                                                })) : <span> Nope :( </span>}
+                                            </div>
+                                        </div>
+                                        <div className="results__grid-item">
+                                            <div className="results__grid-item__title">
+                                                Near By Transit Stops
+                                            </div>
+                                            <div className="results__grid-item__list">
+                                                {pois.stops[0] ? (
+                                                    pois.stops.map((station:any) => {
+                                                        return (
+                                                            <div className="results__grid-item__list-item" 
+                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                            key={station.lat}
+                                                        >
+                                                                {station.name}
+                                                            </div>
+                                                        )
+                                                    })
+                                                ) : <span> Nothing close.. sorry :( </span>}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -156,8 +208,6 @@ export default class Results extends React.Component<any, any> {
                         };
 
                         return null;
-
-
                     }}
                 </TransitQuery>
             </React.Fragment>

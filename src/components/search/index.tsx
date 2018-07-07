@@ -36,7 +36,6 @@ export default class Search extends React.Component<any, any> {
         fetch(query)
         .then(response => {
             response.json().then(data => {
-                console.log(data.features);
                 this.setState({
                     isLoading:false,
                     results: data.features
@@ -65,23 +64,19 @@ export default class Search extends React.Component<any, any> {
         return (
             <div className="search">
                 <form onSubmit={(e) => this.doSearch(e)}>
-                    <input type="text" onChange={e => this.setState({searchQuery: e.target.value })}/>
+                    <input type="text" className="search-bar" onChange={e => this.setState({searchQuery: e.target.value })}/>
                 </form>
                 {results && results[0] ? (
-                    <React.Fragment>
-                        <div className="search__results">
-                            Search Results, please choose correct one
-                        </div>
+                    <div className="search-results">
                         {results.map((result:any) => {
-                            console.log(result);
                             const { name, id } = result.properties;
                             return (
-                                <div onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
+                                <div className="search-result" onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
                                     {name}
                                 </div>
                             )
                         })}
-                    </React.Fragment>
+                    </div>
                 ) : isLoading ? (<Spinner />) : null}
             </div>
         );

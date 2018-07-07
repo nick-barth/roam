@@ -5,9 +5,6 @@ import * as React from 'react';
 import Results from './components/results';
 import Search from './components/search';
 
-// CSS
-import './App.css';
-
 export  class App extends React.Component<any, any> {
   
   constructor(props: any) {
@@ -31,7 +28,13 @@ export  class App extends React.Component<any, any> {
 
     return (
       <div className="App">
+        <div className="title">
+          Helsinki Public Transit
+        </div>
         <Search setMap={(data:any) => this.setMap(data)}/>
+          <div className="map-container">
+            <div id="mapContainer" />
+          </div>
           {query.name !== '' ? <Results lat={query.location[1]} lon={query.location[0]} /> : null}
       </div>
     );
