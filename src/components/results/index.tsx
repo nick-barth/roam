@@ -4,7 +4,7 @@ import * as React from 'react';
 import gql from "graphql-tag";
 import { Query } from 'react-apollo';
 
-import mapboxgl from 'mapbox-gl'
+import mapboxgl from 'mapbox-gl';
 
 // Components
 import Spinner from '../spinner';
@@ -83,7 +83,7 @@ export default class Results extends React.Component<any, any> {
 
         const nearBy = data.filter((item:any) => {
             // Approximation of proximity
-            const radius = 1000;
+            const radius = 10000;
             const lat = this.convertToInt(item.lat);
             const lon = this.convertToInt(item.lon);
 
@@ -102,10 +102,10 @@ export default class Results extends React.Component<any, any> {
 
     public formatData(data:any, coords:any):object {
 
-        return {
+       return {
             bikeParks: this.calcWithinProximity(data.bikeParks, coords),
             bikeRentals: this.calcWithinProximity(data.bikeRentalStations, coords)
-        }
+        };
 
     }
 
@@ -118,50 +118,14 @@ export default class Results extends React.Component<any, any> {
     public getMap(this:any, coords:any):any {
 
             const { lat, lon } = coords;
-            const zoom = 16;
-
-            // Straight up theivery https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#ECMAScript_.28JavaScript.2FActionScript.2C_etc..29
-            const y = Math.floor((lon+180)/360*Math.pow(2,zoom));
-            const x = Math.floor((1-Math.log(Math.tan(lat*Math.PI/180) + 1/Math.cos(lat*Math.PI/180))/Math.PI)/2 *Math.pow(2,zoom));
-
-            // const backgroundUrl = `https://cdn.digitransit.fi/map/v1/hsl-map/${zoom}/${y}/${x}.png`;
-            
-            const poiUrl = `https://cdn.digitransit.fi/map/v1/hsl-stop-map/${zoom}/${y}/${x}.pbf`;
+            const zoom = 18;
 
             this.map = new mapboxgl.Map({
                 container: 'mapContainer',
-                style: 'mapbox://styles/mapbox/streets-v9'
+                style: 'mapbox://styles/mapbox/streets-v9',
+                center: [lon, lat],
+                zoom
             });
-
-            const data = {
-                name:"Points of Interest",
-                format:"pbf",
-                maxzoom:20,
-                minzoom:0,
-                vector_layers:[
-                    {
-                        description:"",
-                        id:"stops"
-                    },
-                    {
-                        description:"",
-                        id:"stations"
-                    }]
-                    ,
-                center:[-122.444,37.7908,12],
-                bounds:[-180,-85.0511,180,85.0511],
-                tiles:[poiUrl],
-                tilejson:"2.0.0"
-            };
-
-            this.map.on('load', () => {
-                this.map.addSource('pois', {
-                    type: 'geojson',
-                    data
-                });
-        
-        });
-
     }
 
     public render () {
@@ -169,26 +133,33 @@ export default class Results extends React.Component<any, any> {
         return (
             <React.Fragment>
                 <TransitQuery query={GET_NEARBY_INFO} variables={{lat, lon}}>
-                {({ loading, error, data }) => {
-                    if (loading) {
-                        return <Spinner />;
-                    }
-                    if (error) {
-                        return `Error! ${error.message}`;
-                    }
-                    if (data) {
-                        const formattedData = this.formatData(data, {lat, lon});
-                        console.log(formattedData);
+                    {({ loading, error, data }) => {
+                        if (loading) {
+                            return <Spinner />;
+                        }
+                        if (error) {
+                            return `Error! ${error.message}`;
+                        }
+                        if (data) {
+                            this.formatData(data, {lat, lon});
+                            this.getMap({lat, lon});
+                            return (
+                                <div>
+                                    <div id="mapContainer" />
+                                    <div className="grid-container">
+                                        <div className="grid-item">
+                                            he
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        };
 
-                        this.getMap({lat, lon});
-                    };
-
-                    return null;
+                        return null;
 
 
-                }}
+                    }}
                 </TransitQuery>
-                <div id="mapContainer" />
             </React.Fragment>
 
             
