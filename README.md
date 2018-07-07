@@ -20,10 +20,11 @@ This was a highly enjoyable assignment for me, as I was able to learn about Grap
 
 
 ### Patterns
-* Being new to Apollo & graphql & Mapbox GL, I struggled with these guys and eventually came up with a pattern I'm quite unhappy with.  Bubbling the data back up to put it on the map, which has to be rendered before we get the data, CANNOT possibly be a good pattern for this.
+* Being new to Apollo & graphql & Mapbox GL, I struggled with these guys and eventually came up with a pattern I'm quite unhappy with.  Bubbling the data back up to put it on the map, which has to be rendered before we get the data, CANNOT possibly be a good pattern for this.  This also had super bad effects on flashing and loading.
 * I didn't deem it worth the time to put a state management system in here, after running but I am very curious to find if best practice is to wait for the data in the render method and sent it to the store, seems strange, but I think you could make a pretty cool *generic* query component
 * I didn't learn how to successfully do filtered queries (ie, get all bikeParks within x longitutes), which is why I grabbed all bike parks and filtered on the clientside (booooo). In addition I did this sketchy at best with some abhorrent float -> int conversions.
-* Poor job approximenting distance.  
+* Poor job approximenting distance.
+
 
 ### Complaints 
 * Apollo's typescript docs are super [outdated](https://www.apollographql.com/docs/react/recipes/static-typing.html) 
