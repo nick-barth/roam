@@ -11,16 +11,14 @@
     "apollo-client": "^2.3.5",
     "apollo-link-http": "^1.5.4",
     "cross-fetch": "^2.2.2",
-    "geobuf": "^3.0.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "mapbox-gl": "^0.46.0",
-    "pbf": "^3.1.0",
     "react": "^16.4.1",
     "react-apollo": "^2.1.8",
     "react-dom": "^16.4.1",
     "react-scripts-ts": "2.16.0",
-    "remove-flow-types-loader": "^1.1.0"
+    "tslint-eslint-rules": "^5.3.1"
   },
   "scripts": {
     "start": "react-scripts-ts start",

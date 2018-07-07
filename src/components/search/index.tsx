@@ -64,14 +64,14 @@ export default class Search extends React.Component<any, any> {
         return (
             <div className="search">
                 <form onSubmit={(e) => this.doSearch(e)}>
-                    <input type="text" className="search-bar" onChange={e => this.setState({searchQuery: e.target.value })}/>
+                    <input type="text" className="search__bar" onChange={e => this.setState({searchQuery: e.target.value })}/>
                 </form>
                 {results && results[0] ? (
                     <div className="search-results">
                         {results.map((result:any) => {
                             const { name, id } = result.properties;
                             return (
-                                <div className="search-result" onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
+                                <div className="search__result" onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
                                     {name}
                                 </div>
                             )

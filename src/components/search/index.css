@@ -1,13 +1,19 @@
+input[type="text"] {
+  outline: none;
+  border:0;
+  padding:.4rem;
+}
+
 .search {
     text-align: center;
 }
 
-.search-bar {
+.search__bar {
     max-width: 20rem;
     width: 100%;
 }
 
-.search-result {
+.search__result {
     background: #fff;
     color: #3d4447;
     border-radius: 2px;
@@ -19,6 +25,6 @@
     cursor:pointer;
 }
 
-.search-result:hover {
+.search__result:hover {
       box-shadow: 0 3.5px 7px rgba(0,0,0,0.25), 0 2.5px 2.5px rgba(0,0,0,0.22);
 }

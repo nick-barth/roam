@@ -83,7 +83,6 @@ export default class Results extends React.Component<any, any> {
      * Calculate Stops/parks/bikerentals within proximity of our position
      * @param data 
      */
-
     public calcWithinProximity (data:object[], coords:any) {
 
         const coordsLat = this.convertToInt(coords.lat);
@@ -129,6 +128,12 @@ export default class Results extends React.Component<any, any> {
 
     }
 
+    /**
+     * Centers map to passed location, doesnt allow chaining to make beuatiful transition :(
+     * @param this 
+     * @param coords 
+     */
+
     public centerMap(this: any, coords:any):void {
         const { lat, lon } = coords;
 
@@ -138,6 +143,11 @@ export default class Results extends React.Component<any, any> {
 
     }
 
+    /**
+     * Creates new map
+     * @param this 
+     * @param coords 
+     */
     public getMap(this:any, coords:any):any {
 
             const { lat, lon } = coords;
@@ -232,13 +242,10 @@ export default class Results extends React.Component<any, any> {
                                 </div>
                             )
                         };
-
                         return null;
                     }}
                 </TransitQuery>
             </React.Fragment>
-
-            
         );
     }
 };

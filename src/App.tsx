@@ -19,6 +19,11 @@ export  class App extends React.Component<any, any> {
 
   }
 
+  /**
+   * Sets map to the point data we were given from the query
+   * @param pointData 
+   */
+
   public setMap(pointData: any):void {
     this.setState({ query: pointData });
   };
