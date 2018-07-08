@@ -4,10 +4,13 @@ import * as React from 'react';
 // Components
 import Spinner from '../spinner';
 
+// Types
+import { SearchComponent } from '../../types';
+
 // CSS
 import './index.css';
 
-export default class Search extends React.Component<any, any> {
+export default class Search extends React.Component<SearchComponent, any> {
 
     constructor(props:any) {
         super(props);

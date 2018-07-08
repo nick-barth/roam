@@ -15,15 +15,16 @@ import './index.css';
 // Queries
 import { GET_NEARBY_INFO } from '../../queries';
 
+// Would go in config file
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGlzb3duZm9vdCIsImEiOiJjamphNWZvaTMwN3VkM3dwajluOGQxOThtIn0.96xLYTzSYN7V6iN0EbzpnA';
 
 
 // I can't decide how to pattern this so I'm going to be in paralysis and just leave it here.
 class TransitQuery extends Query<Coords> {}
 
-export default class Results extends React.Component<any, any> {
+export default class Results extends React.Component<Coords, any> {
 
-    constructor(props:any) {
+    constructor(props:Coords) {
         super(props);
 
     }
@@ -73,6 +74,7 @@ export default class Results extends React.Component<any, any> {
             return stop.node.stop;
         });
 
+		// Sketchy stuff to get rid of duplicates (not really duplicates, but whatever)
         const uniqStops = stops.filter((stop:any, index:number, self:any) =>
             index === self.findIndex((s:any) => (
                 s.name === stop.name
@@ -94,14 +96,14 @@ export default class Results extends React.Component<any, any> {
      * @param coords
      */
 
-    public centerMap(this: any, coords:any):void {
-        const { lat, lon } = coords;
+    public centerMap(this: any, coords:Coords):void {
+		const { lat, lon } = coords;
 
-        this.map.easeTo({
-            center: [lon, lat],
-        })
+		this.map.easeTo({
+			center: [lon, lat],
+		})
 
-    }
+	}
 
     /**
      * Creates new map
@@ -109,16 +111,15 @@ export default class Results extends React.Component<any, any> {
      * @param coords
      */
     public getMap(this:any, coords:Coords):void {
+		const { lat, lon } = coords;
+		const zoom = 18;
 
-            const { lat, lon } = coords;
-            const zoom = 18;
-
-            this.map = new mapboxgl.Map({
-                container: 'mapContainer',
-                style: 'mapbox://styles/mapbox/streets-v9',
-                center: [lon, lat],
-                zoom
-            });
+		this.map = new mapboxgl.Map({
+			container: 'mapContainer',
+			style: 'mapbox://styles/mapbox/streets-v9',
+			center: [lon, lat],
+			zoom
+		});
     }
 
     public render () {

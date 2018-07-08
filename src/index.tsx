@@ -13,8 +13,6 @@ import App from './App';
 // CSS
 import './index.css';
 
-
-
 const url = 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql';
 
 const httpLink = new HttpLink({

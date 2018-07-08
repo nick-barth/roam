@@ -15,3 +15,8 @@ export interface NearByPois {
     bikeParks: object[],
     stops: object[]
 }
+
+export interface SearchComponent {
+	setMap(object:any): void,
+	clearSelection(): void
+}

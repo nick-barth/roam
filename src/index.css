@@ -4,7 +4,7 @@
   box-sizing:border-box;
 }
 
-html, body { 
+html, body {
   margin:0;
   padding:0;
   width:100%;
@@ -40,6 +40,13 @@ body {
     padding: 1rem 0;
 }
 
+.map-container{
+	visibility:hidden;
+}
+
+.map-container--displayed {
+	visibility: visible;
+}
 
 #mapContainer {
     width: 300px;
