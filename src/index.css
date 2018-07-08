@@ -42,10 +42,13 @@ body {
 
 .map-container{
 	visibility:hidden;
+	transform: scale(.1);
+	transition: .3s ease-in all;
 }
 
 .map-container--displayed {
 	visibility: visible;
+	transform: scale(1);
 }
 
 #mapContainer {
