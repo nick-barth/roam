@@ -1,65 +1,25 @@
 // Vendors
 import * as React from 'react';
-
-import gql from "graphql-tag";
 import { Query } from 'react-apollo';
-
 import mapboxgl from 'mapbox-gl';
 
 // Components
 import Spinner from '../spinner';
 
+// Types
+import { Coords, NearByPois } from '../../types';
+
 // CSS
 import './index.css';
+
+// Queries
+import { GET_NEARBY_INFO } from '../../queries';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiaGlzb3duZm9vdCIsImEiOiJjamphNWZvaTMwN3VkM3dwajluOGQxOThtIn0.96xLYTzSYN7V6iN0EbzpnA';
 
 
-// Interfaces
-interface InterfaceProps {
-  lat?: number;
-  lon?: number;
-}
-
-interface InterfaceNearBy {
-    bikeRentals: object[],
-    bikeParks: object[],
-    stops: object[]
-}
-
-
-
-// GQL query
-const GET_NEARBY_INFO = gql`
-    query getInfo ($lat: Float, $lon: Float) {
-        stopsByRadius(lat:$lat, lon:$lon, radius:500) {
-            edges {
-                node {
-                    stop { 
-                        name
-                        lat
-                        lon
-                    }
-                }
-            }
-        }
-        bikeRentalStations{
-            name
-            stationId
-            id
-            lat
-            lon
-        }
-        bikeParks{
-            name
-            id
-            lat
-            lon
-        }
-    }
-`;
-
-class TransitQuery extends Query<InterfaceProps> {}
+// I can't decide how to pattern this so I'm going to be in paralysis and just leave it here.
+class TransitQuery extends Query<Coords> {}
 
 export default class Results extends React.Component<any, any> {
 
@@ -70,10 +30,10 @@ export default class Results extends React.Component<any, any> {
 
     /**
      * Formatting floating point to numbers for lazy compares
-     * @param float 
+     * @param float
      */
 
-    public convertToInt(float: any):any {
+    public convertToInt(float: number):number {
         const s = String(float);
         const removedPoint = s.replace(/\./g,'');
         return Number(removedPoint);
@@ -81,9 +41,9 @@ export default class Results extends React.Component<any, any> {
 
     /**
      * Calculate Stops/parks/bikerentals within proximity of our position
-     * @param data 
+     * @param data
      */
-    public calcWithinProximity (data:object[], coords:any) {
+    public calcWithinProximity (data:object[], coords:Coords):object[] {
 
         const coordsLat = this.convertToInt(coords.lat);
         const coordsLon = this.convertToInt(coords.lon);
@@ -103,11 +63,11 @@ export default class Results extends React.Component<any, any> {
 
     /**
      * formatData
-     * @param data 
-     * @param coords 
+     * @param data
+     * @param coords
      */
 
-    public formatData(data:any, coords:any):InterfaceNearBy {
+    public formatData(data:any, coords:Coords):NearByPois {
 
         const stops = data.stopsByRadius.edges.map((stop:any) => {
             return stop.node.stop;
@@ -130,8 +90,8 @@ export default class Results extends React.Component<any, any> {
 
     /**
      * Centers map to passed location, doesnt allow chaining to make beuatiful transition :(
-     * @param this 
-     * @param coords 
+     * @param this
+     * @param coords
      */
 
     public centerMap(this: any, coords:any):void {
@@ -145,10 +105,10 @@ export default class Results extends React.Component<any, any> {
 
     /**
      * Creates new map
-     * @param this 
-     * @param coords 
+     * @param this
+     * @param coords
      */
-    public getMap(this:any, coords:any):any {
+    public getMap(this:any, coords:Coords):void {
 
             const { lat, lon } = coords;
             const zoom = 18;
@@ -166,7 +126,6 @@ export default class Results extends React.Component<any, any> {
         this.getMap({lat, lon});
 
         return (
-            <React.Fragment>
                 <TransitQuery query={GET_NEARBY_INFO} variables={{lat, lon}}>
                     {({ loading, error, data }) => {
                         if (loading) {
@@ -177,7 +136,6 @@ export default class Results extends React.Component<any, any> {
                         }
                         if (data) {
                             const pois = this.formatData(data, {lat, lon});
-                            console.log(pois);
                             return (
                                 <div>
                                     <div className="results__grid-container">
@@ -189,9 +147,9 @@ export default class Results extends React.Component<any, any> {
                                                 {pois.bikeRentals[0] ? (
                                                     pois.bikeRentals.map((station:any) => {
                                                         return (
-                                                            <div 
-                                                                className="results__grid-item__list-item" 
-                                                                onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                            <div
+                                                                className="results__grid-item__list-item"
+                                                                onClick={() => this.centerMap({lat:station.lat, lon:station.lon})}
                                                                 key={station.name}
                                                             >
                                                                 {station.name}
@@ -208,8 +166,8 @@ export default class Results extends React.Component<any, any> {
                                                 {pois.stops[0] ? (
                                                     pois.stops.map((station:any) => {
                                                         return (
-                                                            <div className="results__grid-item__list-item" 
-                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                            <div className="results__grid-item__list-item"
+                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})}
                                                             key={station.lat}
                                                         >
                                                                 {station.name}
@@ -227,8 +185,8 @@ export default class Results extends React.Component<any, any> {
                                                 {pois.bikeParks[0] ? (
                                                     pois.bikeParks.map((station:any) => {
                                                         return (
-                                                            <div className="results__grid-item__list-item" 
-                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})} 
+                                                            <div className="results__grid-item__list-item"
+                                                            onClick={() => this.centerMap({lat:station.lat, lon:station.lon})}
                                                             key={station.lat}
                                                         >
                                                                 {station.name}
@@ -245,7 +203,6 @@ export default class Results extends React.Component<any, any> {
                         return null;
                     }}
                 </TransitQuery>
-            </React.Fragment>
         );
     }
 };

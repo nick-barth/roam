@@ -1,19 +1,17 @@
+// Vendors
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import App from './App';
-import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-
-import 'cross-fetch/polyfill';
-
-
 import { InMemoryCache } from 'apollo-cache-inmemory';
-
 import { ApolloClient } from 'apollo-client';
-
 import { HttpLink } from 'apollo-link-http';
-
 import { ApolloProvider } from 'react-apollo';
+
+// Components
+import App from './App';
+
+// CSS
+import './index.css';
 
 
 
