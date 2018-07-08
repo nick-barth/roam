@@ -13,10 +13,8 @@ This was a highly enjoyable assignment for me, as I was able to learn about Grap
 ### Standardization, standardisation, standardizations 
 * I never took the time to properly make a tsconfig that would be up to my standards (my eslint config).  
 * I didn't add my editorconfig as well until near the very end, just powering through spaces and tabs.
-* I used BEM & module imports, the global css file is a mess as well, no resets
-* I never bothered to alphabetically sort any of the imports (also would disable that rule in my future tsconfig, so they could be grouped logically).
+* was lazy with css, barely BEM, the global css file is a mess as well, no resets
 * Did a horrible job typing, was throwing around :any like a typeless pinata, definitely lame
-* Overall shit code, query should be it's own component.
 
 
 ### Patterns
