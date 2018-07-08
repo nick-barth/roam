@@ -36,7 +36,7 @@ export  class App extends React.Component<any, any> {
         <div className="title">
           Helsinki Public Transit
         </div>
-        <Search setMap={(data:any) => this.setMap(data)}/>
+        <Search setMap={(data:any) => this.setMap(data)} clearSelection={() => this.setState({query: {location: ['',''], name:''}})}/>
           <div className="map-container">
             <div id="mapContainer" />
           </div>

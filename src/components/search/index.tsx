@@ -36,13 +36,14 @@ export default class Search extends React.Component<any, any> {
         fetch(query)
         .then(response => {
             response.json().then(data => {
+                this.props.clearSelection();
                 this.setState({
                     isLoading:false,
                     results: data.features
                 });
             })
         });
-        
+
     };
 
     /**
@@ -53,7 +54,7 @@ export default class Search extends React.Component<any, any> {
     public selectLocation(loc:object): void {
         this.props.setMap(loc);
         this.setState({
-            results: []
+            results: null
         });
     }
 
@@ -66,17 +67,19 @@ export default class Search extends React.Component<any, any> {
                 <form onSubmit={(e) => this.doSearch(e)}>
                     <input type="text" className="search__bar" onChange={e => this.setState({searchQuery: e.target.value })}/>
                 </form>
-                {results && results[0] ? (
-                    <div className="search-results">
-                        {results.map((result:any) => {
-                            const { name, id } = result.properties;
-                            return (
-                                <div className="search__result" onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
-                                    {name}
-                                </div>
-                            )
-                        })}
-                    </div>
+                {results ? (
+                    results[0] ? (
+						<div className="search-results">
+							{results.map((result:any) => {
+								const { name, id } = result.properties;
+								return (
+									<div className="search__result" onClick={() => this.selectLocation({ location: result.geometry.coordinates, name})} key={id}>
+										{name}
+									</div>
+								)
+							})}
+						</div>
+					) : 'No results found'
                 ) : isLoading ? (<Spinner />) : null}
             </div>
         );
