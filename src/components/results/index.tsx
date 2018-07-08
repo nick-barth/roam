@@ -138,7 +138,8 @@ export default class Results extends React.Component<Coords, any> {
                         if (data) {
                             const pois = this.formatData(data, {lat, lon});
                             return (
-                                <div>
+								// This would be just a loop with language files, because all three of these are the same sorry for DRY
+                                <React.Fragment>
                                     <div className="results__grid-container">
                                         <div className="results__grid-item">
                                             <div className="results__grid-item__title">
@@ -198,7 +199,7 @@ export default class Results extends React.Component<Coords, any> {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </React.Fragment>
                             )
                         };
                         return null;
